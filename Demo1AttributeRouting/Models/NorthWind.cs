@@ -16,5 +16,11 @@ namespace Demo1AttributeRouting.Models
         {
 
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Book>().ToTable("Book");
+            modelBuilder.Entity<Author>().ToTable("Author");
+        }
     }
 }

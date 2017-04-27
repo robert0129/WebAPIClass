@@ -1,4 +1,5 @@
-﻿using Demo1AttributeRouting.Models;
+﻿using Demo1AttributeRouting.Data;
+using Demo1AttributeRouting.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -26,12 +27,13 @@ namespace Demo1AttributeRouting
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<NorthWind>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddMvc();
-            services.AddDbContext<NorthWind>(opt => opt.UseSqlServer("Data Source=(localdb)\\ProjectsV13;Initial Catalog=NorthWind;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, NorthWind northWind)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -54,6 +56,7 @@ namespace Demo1AttributeRouting
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
             
+            DbInitializer.Initialize(northWind);
         }
     }
 }
