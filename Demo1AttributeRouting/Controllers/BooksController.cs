@@ -10,7 +10,7 @@ using Demo1AttributeRouting.CustomHandler;
 
 namespace Demo1AttributeRouting.Controllers
 {
-    [CacheActionAttribute]
+    [CacheAction]
     [Produces("application/json")]
     [Route("Books")]
     public class BooksController : Controller

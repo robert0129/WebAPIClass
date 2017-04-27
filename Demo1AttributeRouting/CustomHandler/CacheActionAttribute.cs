@@ -21,7 +21,7 @@ namespace Demo1AttributeRouting.CustomHandler
                      Public = true,
                      MaxAge = TimeSpan.FromSeconds(10)
                 };
-                context.HttpContext.Response.Headers[HeaderNames.Vary] = new string[] {"Accept-Encoding"};
+                context.HttpContext.Response.Headers[HeaderNames.Vary] = new string[] { "Accept-Encoding: gzip" };
             }
             base.OnActionExecuted(context);
         }
