@@ -6,7 +6,7 @@ namespace Demo1AttributeRouting.Models
 {
     public class Book
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
+        //[Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int BookId { get; set; }
         [Required]
         public string Title { get; set; }

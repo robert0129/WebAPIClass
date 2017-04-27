@@ -5,7 +5,7 @@ namespace Demo1AttributeRouting.Models
 {
     public class Author
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
+        //[Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int AuthorId { get; set; }
         [Required]
         public string Name { get; set; }

@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Demo1AttributeRouting.Models;
+using Demo1AttributeRouting.CustomHandler;
 
 namespace Demo1AttributeRouting.Controllers
 {
+    [CacheActionAttribute]
     [Produces("application/json")]
-    [Route("api/Books")]
+    [Route("Books")]
     public class BooksController : Controller
     {
         private readonly NorthWind _context;
@@ -28,7 +30,7 @@ namespace Demo1AttributeRouting.Controllers
         }
 
         // GET: api/Books/5
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetBook([FromRoute] int id)
         {
             if (!ModelState.IsValid)
@@ -47,7 +49,7 @@ namespace Demo1AttributeRouting.Controllers
         }
 
         // PUT: api/Books/5
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> PutBook([FromRoute] int id, [FromBody] Book book)
         {
             if (!ModelState.IsValid)
@@ -97,7 +99,7 @@ namespace Demo1AttributeRouting.Controllers
         }
 
         // DELETE: api/Books/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteBook([FromRoute] int id)
         {
             if (!ModelState.IsValid)
@@ -120,6 +122,37 @@ namespace Demo1AttributeRouting.Controllers
         private bool BookExists(int id)
         {
             return _context.Books.Any(e => e.BookId == id);
+        }
+
+        [Route("{*genre}")]
+        [HttpGet("{*genre}")]
+        public ActionResult GetBookByGenre(string genre)
+        {
+            var books = _context.Books.Include(b => b.Author)
+                .Where(b => b.Genre.Equals(genre, StringComparison.OrdinalIgnoreCase));
+
+            return Ok(books);
+        }
+
+        [Route("~/authors/{authorId:int}/books")]
+        [HttpGet]
+        public ActionResult GetBooksByAuthor(int authorId)
+        {
+            var author = _context.Books.Include(b => b.Author)
+                .Where(b => b.AuthorId == authorId);
+
+            return Ok(author);
+        }
+
+        [HttpGet]
+        [Route("date/{*pubdate:datetime}")]
+        //[Route("date/{*pubdate:datetime:regex(\\d{4}/\\d{2}/\\d{2})}")]
+        public ActionResult Get(DateTime pubdate)
+        {
+            var books = _context.Books.Include(b => b.Author)
+                .Where(b => b.PublishDate == pubdate);
+
+            return Ok(books);
         }
     }
 }
