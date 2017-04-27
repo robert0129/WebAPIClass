@@ -8,9 +8,13 @@ namespace Demo1AttributeRouting.Models
 {
     public class NorthWind : DbContext
     {
+        public DbSet<Book> Books { get; set; }
+        public DbSet<Author> Authors { get; set; }
+
         public NorthWind(DbContextOptions<NorthWind> options)
             : base(options)
         {
+
         }
     }
 }
